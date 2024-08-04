@@ -12,11 +12,10 @@ const getAll = () => {
 };
 
 const getWeather = (lat, lon) => {
-  const request = axios.get(
-    `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily,alerts&appid=${api_key}&units=metric`,
-  );
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${api_key}`;
+  const request = axios.get(url);
   return request.then((response) => {
-    return response.data.current;
+    return response.data;
   });
 };
 

@@ -5,18 +5,18 @@ const Countries = ({ search, setSearch, countries, setCountries }) => {
   const [weather, setWeather] = useState({});
 
   useEffect(() => {
-    server.getAll().then((response) => {
-      setCountries(
-        response.filter((country) => {
-          return country.name.common
-            .toUpperCase()
-            .includes(search.toUpperCase());
-        }),
-      );
-    })
-      .catch((error) =>
-        console.log("Error when fetching from countries API."),
-      );
+    server
+      .getAll()
+      .then((response) => {
+        setCountries(
+          response.filter((country) => {
+            return country.name.common
+              .toUpperCase()
+              .includes(search.toUpperCase());
+          }),
+        );
+      })
+      .catch((error) => console.log("Error when fetching from countries API."));
   }, [search]);
 
   if (countries.length > 10) {
@@ -42,21 +42,20 @@ const Countries = ({ search, setSearch, countries, setCountries }) => {
       .getWeather(countries[0].latlng[0], countries[0].latlng[1])
       .then((response) => {
         setWeather({
-          temp: response.temp,
+          temp: response.main.temp,
           description: response.weather[0].description,
           icon: `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`,
-          wind: response.wind_speed,
+          wind: response.wind.speed,
         });
       })
-      .catch((error) =>
-        console.log("Error when fetching from weather API."),
-      );
+      .catch((error) => console.log("Error when fetching from weather API."));
 
+    // only getting the first capital city, for formatting purposes, nothing implemented for countries with multiple capital cities.
     return (
       <div>
         <h2>{countries[0].name.common}</h2>
         <div>
-          <p>capital {countries[0].capital}</p>
+          <p>capital {countries[0].capital[0]}</p>
         </div>
         <p>area {countries[0].area}</p>
         <h3>languages:</h3>
